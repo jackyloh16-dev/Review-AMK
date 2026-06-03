@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRIT AMK - Customer Experience</title>
+    <style>
+        /* 全局高端极简背景 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            text-align: center;
+            padding: 50px 20px;
+            background: radial-gradient(circle, #fcfdfe 0%, #f4f6f8 100%);
+            color: #1f2937;
+            margin: 0;
+        }
+
+        /* 轻奢感悬浮卡片 */
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 35px 25px;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.01);
+            border: 1px solid rgba(243, 244, 246, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        /* Logo 图片样式 */
+        .logo {
+            max-width: 260px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 专业化排版 */
+        h2 { 
+            font-size: 24px; 
+            font-weight: 700; 
+            letter-spacing: -0.5px;
+            margin-bottom: 12px; 
+            color: #111827;
+            line-height: 1.3;
+        }
+        
+        p { 
+            color: #6b7280; 
+            font-size: 15px; 
+            margin-bottom: 35px; 
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* 现代化的金色星排列 */
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        /* 矢量星星按钮样式与微动效 */
+        .star-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            width: 48px;
+            height: 48px;
+            color: #fbbf24; /* 高级质感金 */
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* 触碰/点击时的Q弹高级反馈 */
+        .star-btn:active {
+            transform: scale(1.25);
+        }
+
+        /* 成功拦截后的优雅渐现样式 */
+        #thank-you-area {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .success-icon {
+            width: 56px;
+            height: 56px;
+            color: #10b981;
+            margin-bottom: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- 店铺 Logo 图片 -->
+        <img src="logo.png" alt="TRIT Computer Logo" class="logo">
+
+        <!-- 评分区域 -->
+        <div id="rating-area">
+            <h2>Thank You for Visiting<br>TRIT AMK</h2>
+            <p>Your feedback drives our excellence.<br>How would you rate your overall experience with us today?</p>
+
+            <div class="stars">
+                <!-- 使用专业矢量SVG星星 -->
+                <button class="star-btn" onclick="handleRate(1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button>
+                <button class="star-btn" onclick="handleRate(2)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button>
+                <button class="star-btn" onclick="handleRate(3)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button>
+                <button class="star-btn" onclick="handleRate(4)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button>
+                <button class="star-btn" onclick="handleRate(5)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button>
+            </div>
+        </div>
+
+        <!-- 差评拦截后的优雅致谢区 -->
+        <div id="thank-you-area" style="display: none;">
+            <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <h2>Thank You for Your Value Feedback</h2>
+            <p style="font-size: 15px; color: #4b5563;">We have successfully received your response.<br>We constantly strive to elevate our standards and appreciate your time.</p>
+        </div>
+    </div>
+
+    <script>
+        // 自动绑定的真实 Google Review 链接
+        const GOOGLE_REVIEW_URL = "https://g.page/r/CS51tQqVBkLHEBM/review"; 
+
+        function handleRate(stars) {
+            if (stars >= 4) {
+                window.location.href = GOOGLE_REVIEW_URL;
+            } else {
+                document.getElementById("rating-area").style.display = "none";
+                document.getElementById("thank-you-area").style.display = "block";
+            }
+        }
+    </script>
+
+</body>
+</html>
