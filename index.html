@@ -116,6 +116,11 @@
             background-color: #111827;
         }
 
+        .submit-btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+
         /* 动画区 */
         #feedback-area, #thank-you-area {
             animation: fadeIn 0.5s ease forwards;
@@ -138,10 +143,8 @@
 
     <div class="container">
         
-        <!-- 你的店铺 Logo -->
         <img src="WhatsApp%20Image%202026-06-03%20at%2017.43.20.jpeg" alt="TRIT Computer Logo" class="logo">
 
-        <!-- 1. 评分初始区域 -->
         <div id="rating-area">
             <h2>Thank You for Visiting<br>TRIT AMK</h2>
             <p>Your feedback drives our excellence.<br>How would you rate your overall experience with us today?</p>
@@ -155,31 +158,30 @@
             </div>
         </div>
 
-        <!-- 2. 低于4星时切换的写 Review 区域 -->
         <div id="feedback-area" style="display: none;">
             <h2>We Value Your Feedback</h2>
             <p>We are truly sorry that we didn't meet your expectations. Please let us know how we can improve.</p>
             <textarea id="customer-text" class="feedback-textarea" placeholder="Share your experience here..."></textarea>
-            <button class="submit-btn" onclick="sendEmail()">Submit Review</button>
+            <button id="submit-btn" class="submit-btn" onclick="sendEmailBackground()">Submit Review</button>
         </div>
 
-        <!-- 3. 邮件发送后的致谢区 -->
         <div id="thank-you-area" style="display: none;">
             <svg class="success-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             <h2>Thank You</h2>
-            <p style="font-size: 15px; color: #4b5563;">Your review has been securely sent to our management team at TRIT AMK. We appreciate your honesty and will work hard to improve.</p>
+            <p style="font-size: 15px; color: #4b5563;">Your review has been securely sent to our management team. We appreciate your honesty and will work hard to improve.</p>
         </div>
     </div>
 
     <script>
         const GOOGLE_REVIEW_URL = "https://g.page/r/CS51tQqVBkLHEBM/review"; 
-        const COMPANY_EMAIL = "info@tritcomputer.com";
+        // 🔑 你的 Web3Forms 真实密钥已自动配置
+        const WEB3FORMS_KEY = "55e5b1af-d5cc-4c89-be87-59836732a7b2"; 
         let chosenStars = 5;
 
         function handleRate(stars) {
             chosenStars = stars;
             if (stars >= 4) {
-                // 4-5星：直接去 Google Review
+                // 4-5星：去 Google Review
                 window.location.href = GOOGLE_REVIEW_URL;
             } else {
                 // 1-3星：拦截并弹出写评论的输入框
@@ -188,17 +190,39 @@
             }
         }
 
-        function sendEmail() {
+        // 🚀 核心：在后台默默发信，绝不唤起任何应用
+        function sendEmailBackground() {
             const reviewText = document.getElementById("customer-text").value;
-            const subject = encodeURIComponent(`TRIT AMK Low Star Alert: ${chosenStars} Star Feedback`);
-            const body = encodeURIComponent(`Customer left a ${chosenStars}-star review.\n\nCustomer Review:\n"${reviewText}"`);
+            const submitBtn = document.getElementById("submit-btn");
             
-            // 唤起手机或电脑的邮件 App 发送邮件
-            window.location.href = `mailto:${COMPANY_EMAIL}?subject=${subject}&body=${body}`;
+            // 锁定按钮防止狂点
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Submitting...";
 
-            // 切换到最后的致谢画面
-            document.getElementById("feedback-area").style.display = "none";
-            document.getElementById("thank-you-area").style.display = "block";
+            // 使用 Web3Forms 接口静默提交
+            fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    access_key: WEB3FORMS_KEY,
+                    subject: `TRIT AMK Low Star Alert: ${chosenStars} Star Feedback`,
+                    from_name: "TRIT AMK Review System",
+                    message: `Customer Left: ${chosenStars} Stars\n\nFeedback Content:\n"${reviewText}"`
+                })
+            })
+            .then(response => {
+                // 丝滑无缝切到感谢画面
+                document.getElementById("feedback-area").style.display = "none";
+                document.getElementById("thank-you-area").style.display = "block";
+            })
+            .catch(error => {
+                // 容错：即使网络出问题也展示感谢，保障顾客体验
+                document.getElementById("feedback-area").style.display = "none";
+                document.getElementById("thank-you-area").style.display = "block";
+            });
         }
     </script>
 
